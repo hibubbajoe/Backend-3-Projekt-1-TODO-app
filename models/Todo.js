@@ -12,18 +12,19 @@ const TodoSchema = new Schema({
   },
   published: {
     type: Date,
+    default: Date.now(),
     required: true
   },
   category: {
     type: String,
     default: "Allmänt",
     required: true
-  },
-  author: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-    required: true
   }
+  // author: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: "User",
+  //   required: true
+  // }
 });
 
 module.exports = mongoose.model("Todo", TodoSchema);

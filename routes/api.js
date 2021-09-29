@@ -1,7 +1,8 @@
 var express = require("express");
 var router = express.Router();
+var Todo = require("../models/Todo");
 
-let items = [
+let todos = [
   {
     id: 1,
     title: "Hej",
@@ -20,8 +21,8 @@ let items = [
 ];
 
 /* GET ALL ITEMS */
-router.get("/items", function(req, res, next) {
-  res.json(items);
+router.get("/todos", function(req, res, next) {
+  res.json(todos);
 });
 
 /* GET ITEM BY ID */
@@ -31,24 +32,22 @@ router.get("/item/:id", function(req, res, next) {
   res.json(item);
 });
 
-/* POST NEW ITEM */
-router.post("/items", function(req, res, next) {
-  const newItem = {
+router.post("/todo", function(req, res, next) {
+  const newTodo = {
     title: req.body.title,
     body: req.body.body
   };
 
-  res.json(newItem);
-
-//   console.log(newItem);
+  const todo = new Todo(newTodo);
+  todo.save().then(todo => res.json(todo));
 });
 
 /* DELETE NEW ITEM */
-router.delete("/item/:id"), function (req, res, next) {
+router.delete("/item/:id"),
+  function(req, res, next) {
     const id = req.params.id;
     if (!id) {
-        
     }
-}
+  };
 
 module.exports = router;
