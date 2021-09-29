@@ -43,4 +43,12 @@ router.post("/items", function(req, res, next) {
 //   console.log(newItem);
 });
 
+/* DELETE NEW ITEM */
+router.delete("/item/:id"), function (req, res, next) {
+    const id = req.params.id;
+    if (!id) {
+        
+    }
+}
+
 module.exports = router;
