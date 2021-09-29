@@ -1,10 +1,15 @@
 import './App.css';
+import React from 'react';
+import Todo from './pages/Todo'
 
 function App() {
+
+
   return (
-    <h1 className="App">
-      Jag är React
-    </h1>
+
+    <div>
+      <Todo />
+    </div>
   );
 }
 
