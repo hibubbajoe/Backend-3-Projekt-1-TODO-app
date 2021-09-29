@@ -19,10 +19,31 @@ let items = [
     }
 ]
 
-/* GET home page. */
+/* GET ALL ITEMS */
 router.get('/items', function (req, res, next) {
     res.json(items);
 });
+
+/* GET ITEM BY ID */
+router.get('/item/:id', function (req, res, next) {
+    const itemId = req.params.id;
+    const item = items.find(item => item.id == itemId);
+    res.json(item);
+});
+
+/* POST NEW ITEM */
+router.post('/items', function (req, res, next) {
+    const newItem = req.body;
+    items.forEach((item) => {
+        if (newItem.id <= item.id) {
+            newItem.id = item.id;
+        }
+    });
+    newItem.id++;
+    console.log(newItem);
+});
+
+
 
 
 module.exports = router;
