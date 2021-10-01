@@ -4,6 +4,11 @@ import React, { useEffect, useState } from "react";
 import todoFetches from "../fetches/TodoFetches";
 
 export default function Todo() {
+
+  // FETCH ITEMS
+  const [data, setData] = useState([]);
+
+  // NEW ITEM
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
 
@@ -18,9 +23,10 @@ export default function Todo() {
     });
   };
 
-  //   useEffect(() => {
-  //     axios("http://localhost:5000/api/items").then(res => setData(res.data));
-  //   }, []);
+  useEffect(() => {
+    todoFetches.getTodos()
+      .then(res => setData(res.data))
+  }, []);
 
   const onChange = e => {
     if (e.target.name === "body") {
@@ -45,11 +51,11 @@ export default function Todo() {
         <input type="textarea" name="body" id="body" onChange={onChange} />
         <input type="submit" value="Add new todo" />
       </form>
-      {/* <ul>
+      <ul>
         {data.map((item, i) => (
           <li key={i}>{item.title}</li>
         ))}
-      </ul> */}
+      </ul>
     </div>
   );
 }

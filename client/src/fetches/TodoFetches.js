@@ -5,9 +5,11 @@ const url = axios.create({
 });
 
 export const insertTodo = payload => url.post(`/todo`, payload);
+export const getTodos = () => url.get('/todos');
 
 const todoFetches = {
-  insertTodo
+  insertTodo,
+  getTodos
 };
 
 export default todoFetches;
