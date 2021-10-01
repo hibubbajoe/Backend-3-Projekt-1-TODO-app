@@ -6,7 +6,7 @@ const url = axios.create({
 
 export const insertTodo = payload => url.post(`/todos`, payload);
 export const getAllTodos = () => url.get("/todos");
-export const getSingleTodo = payload => url.get("/todos/:id", payload);
+export const getSingleTodo = payload => url.get("/todos/:id", { params: { id: payload } });
 
 const todoFetches = {
   insertTodo,

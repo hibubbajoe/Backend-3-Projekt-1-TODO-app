@@ -8,9 +8,7 @@ function App() {
   return (
     <div>
       <Switch>
-        <Route path="/todos/:id">
-          <TodoItem />
-        </Route>
+        <Route path="/todos/:id" component={TodoItem} />
         <Route path="/">
           <Todo />
         </Route>
