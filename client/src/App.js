@@ -1,14 +1,20 @@
-import './App.css';
-import React from 'react';
-import Todo from './pages/Todo'
+import "./App.css";
+import React from "react";
+import Todo from "./pages/Todo";
+import TodoItem from "./pages/TodoItem";
+import { BrowserRouter as Router, Link, Switch, Route } from "react-router-dom";
 
 function App() {
-
-
   return (
-
     <div>
-      <Todo />
+      <Switch>
+        <Route path="/todos/:id">
+          <TodoItem />
+        </Route>
+        <Route path="/">
+          <Todo />
+        </Route>
+      </Switch>
     </div>
   );
 }

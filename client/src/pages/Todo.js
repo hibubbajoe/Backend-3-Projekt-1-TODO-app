@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import todoFetches from "../fetches/TodoFetches";
 
 export default function Todo() {
-
   // FETCH ITEMS
   const [data, setData] = useState([]);
 
@@ -24,8 +23,7 @@ export default function Todo() {
   };
 
   useEffect(() => {
-    todoFetches.getAllTodos()
-      .then(res => setData(res.data))
+    todoFetches.getAllTodos().then(res => setData(res.data));
   }, []);
 
   const onChange = e => {
@@ -53,7 +51,9 @@ export default function Todo() {
       </form>
       <ul>
         {data.map((item, i) => (
-          <li key={i}>{item.title}</li>
+          <li key={i}>
+            <a href={`/todos/${item._id}`}>{item.title}</a>
+          </li>
         ))}
       </ul>
     </div>
