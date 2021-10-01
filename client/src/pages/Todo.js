@@ -24,7 +24,7 @@ export default function Todo() {
   };
 
   useEffect(() => {
-    todoFetches.getTodos()
+    todoFetches.getAllTodos()
       .then(res => setData(res.data))
   }, []);
 

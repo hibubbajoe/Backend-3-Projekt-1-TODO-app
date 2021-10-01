@@ -4,12 +4,14 @@ const url = axios.create({
   baseURL: "http://localhost:5000/api"
 });
 
-export const insertTodo = payload => url.post(`/todo`, payload);
-export const getTodos = () => url.get('/todos');
+export const insertTodo = payload => url.post(`/todos`, payload);
+export const getAllTodos = () => url.get("/todos");
+export const getSingleTodo = payload => url.get("/todos/:id", payload);
 
 const todoFetches = {
   insertTodo,
-  getTodos
+  getAllTodos,
+  getSingleTodo
 };
 
 export default todoFetches;
