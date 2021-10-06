@@ -27,7 +27,7 @@ router.post("/todos", function(req, res, next) {
 
 /* GET ITEM BY ID */
 router.get("/todos/:id", function(req, res, next) {
-  itemId = req.query.id;
+  itemId = req.params.id;
 
   Todo.findOne({ _id: itemId }).exec((err, todo) => {
     res.json(todo);
@@ -36,12 +36,12 @@ router.get("/todos/:id", function(req, res, next) {
 
 /* DELETE  ITEM BY ID */
 router.delete("/todos/:id", function(req, res, next) {
-    const itemId = req.query.id;
-    console.log("hej" + itemId);
+  const itemId = req.params.id;
+  console.log("hej " + itemId);
 
-    Todo.findOneAndDelete({ _id: itemId }).exec((err, todo) => {
-      res.json(todo);
-    });
+  Todo.findOneAndDelete({ _id: itemId }).exec((err, todo) => {
+    res.json(todo);
   });
+});
 
 module.exports = router;
