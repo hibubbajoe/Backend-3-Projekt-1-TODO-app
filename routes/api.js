@@ -3,7 +3,7 @@ var router = express.Router();
 var Todo = require("../models/Todo");
 
 /* GET ALL ITEMS */
-router.get("/todos", function(req, res, next) {
+router.get("/todos", function (req, res, next) {
   Todo.find().exec((err, todos) => {
     res.json(todos);
     // if (todos) {
@@ -14,8 +14,17 @@ router.get("/todos", function(req, res, next) {
   });
 });
 
+/* GET ITEM BY ID */
+router.get("/todos/:id", function (req, res, next) {
+  itemId = req.params.id;
+
+  Todo.findOne({ _id: itemId }).exec((err, todo) => {
+    res.json(todo);
+  });
+});
+
 /* ADD NEW TODO ITEM */
-router.post("/todos", function(req, res, next) {
+router.post("/todos", function (req, res, next) {
   const newTodo = {
     title: req.body.title,
     body: req.body.body
@@ -25,19 +34,20 @@ router.post("/todos", function(req, res, next) {
   todo.save().then(todo => res.json(todo));
 });
 
-/* GET ITEM BY ID */
-router.get("/todos/:id", function(req, res, next) {
-  itemId = req.params.id;
+router.post("/todos/:id", function (req, res, next) {
+  const id = req.params.id;
+  const { title, body } = req.body;
 
-  Todo.findOne({ _id: itemId }).exec((err, todo) => {
-    res.json(todo);
-  });
-});
+  Todo.findOne({ _id: req.params.id }, (err, todo) => {
+    todo.title = title
+    todo.body = body
+    todo.save()
+  })
+})
 
 /* DELETE  ITEM BY ID */
-router.delete("/todos/:id", function(req, res, next) {
+router.delete("/todos/:id", function (req, res, next) {
   const itemId = req.params.id;
-  console.log("hej " + itemId);
 
   Todo.findOneAndDelete({ _id: itemId }).exec((err, todo) => {
     res.json(todo);
