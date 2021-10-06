@@ -15,15 +15,21 @@ export default function Todo() {
     e.preventDefault();
     const payload = { title, body };
 
-    await todoFetches.insertTodo(payload).then(res => {
-      window.alert(`Todo inserted successfully`);
-      setTitle("");
-      setBody("");
-    });
+    await todoFetches
+      .insertTodo(payload)
+      .then(res => {
+        setTitle("");
+        setBody("");
+      })
+      .then(fetchData());
   };
 
-  useEffect(() => {
+  function fetchData() {
     todoFetches.getAllTodos().then(res => setData(res.data));
+  }
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
   const onChange = e => {
