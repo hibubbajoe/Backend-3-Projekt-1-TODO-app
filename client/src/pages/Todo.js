@@ -2,12 +2,10 @@
 import React, { useEffect, useState } from "react";
 // import axios from "axios";
 import todoFetches from "../fetches/TodoFetches";
-import { useHistory } from "react-router-dom";
 
 export default function Todo() {
   // FETCH ITEMS
   const [data, setData] = useState([]);
-  const history = useHistory();
 
   // NEW ITEM
   const [title, setTitle] = useState("");
@@ -20,15 +18,18 @@ export default function Todo() {
     await todoFetches
       .insertTodo(payload)
       .then(res => {
-        window.alert(`Todo inserted successfully`);
         setTitle("");
         setBody("");
       })
-      .then(() => history.go(0));
+      .then(fetchData());
   };
 
-  useEffect(() => {
+  function fetchData() {
     todoFetches.getAllTodos().then(res => setData(res.data));
+  }
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
   const onChange = e => {
