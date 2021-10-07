@@ -9,7 +9,6 @@ export default function TodoItem(props) {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
 
-
   const onChange = e => {
     if (e.target.name === "body") {
       setBody(e.target.value);
@@ -18,14 +17,14 @@ export default function TodoItem(props) {
     }
   };
 
-  const onSubmit = e => {
+  const onSubmit = async e => {
     e.preventDefault();
     const payload = { title, body };
 
-    todoFetches
+    await todoFetches
       .editTodoById(payload, id)
-      .then(() => history.push("/todos"))
-  }
+      .then(() => history.push("/todos"));
+  };
 
   useEffect(() => {
     todoFetches.getSingleTodo(id).then(res => {
@@ -34,20 +33,46 @@ export default function TodoItem(props) {
     });
   }, []);
 
-
   function deleteTodo() {
     todoFetches.deleteTodoById(id).then(() => history.push("/todos"));
     console.log(id);
   }
 
   return (
-    <div>
-      <form action="" method="post">
-        <input type="text" onChange={onChange} value={title} name="title" id="title" />
-        <input type="text" onChange={onChange} value={body} name="body" id="body" />
-        <button onClick={onSubmit}>Edit Todo</button>
+    <div className="d-flex justify-content-center flex-column">
+      <h2>Need to edit or delete your stuff?</h2>
+      <form onSubmit={onSubmit}>
+        <div className="form-group">
+          <label htmlFor="title">Todo</label>
+          <input
+            type="text"
+            className="form-control"
+            onChange={onChange}
+            value={title}
+            name="title"
+            id="title"
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="body">Description</label>
+          <input
+            type="text"
+            className="form-control"
+            onChange={onChange}
+            value={body}
+            name="body"
+            id="body"
+          />
+        </div>
+        <input className="btn btn-primary" type="submit" value="Edit Todo" />
+        {/* 
+        <button className="btn btn-primary" onClick={onSubmit}>
+          Edit Todo
+        </button> */}
       </form>
-      <button onClick={deleteTodo}>Delete Todo</button>
+      <button className="btn btn-danger" onClick={deleteTodo}>
+        Delete Todo
+      </button>
     </div>
   );
 }

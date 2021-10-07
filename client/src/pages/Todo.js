@@ -41,10 +41,34 @@ export default function Todo() {
   };
 
   return (
-    <div>
-      <h1 className="App">JAG ÄR TODO</h1>
+    <div className="container">
+      <h1 className="App">Keep track of what you have to do!</h1>
 
       <form onSubmit={onSubmit}>
+        <div className="form-group">
+          <label htmlFor="title">Todo</label>
+          <input
+            type="text"
+            className="form-control"
+            name="title"
+            id="title"
+            onChange={onChange}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="body">Description</label>
+          <input
+            type="textarea"
+            className="form-control"
+            name="body"
+            id="body"
+            onChange={onChange}
+          />
+        </div>
+        <input className="btn btn-primary" type="submit" value="Add new todo" />
+      </form>
+
+      {/* <form onSubmit={onSubmit}>
         <input
           type="text"
           name="title"
@@ -53,12 +77,14 @@ export default function Todo() {
           onChange={onChange}
         />
         <input type="textarea" name="body" id="body" onChange={onChange} />
-        <input type="submit" value="Add new todo" />
-      </form>
-      <ul>
+        <input className="btn btn-primary" type="submit" value="Add new todo" />
+      </form> */}
+      <h2 className="text-center">The stuff you currently have to do is...</h2>
+      <ul className="list-group">
         {data.map((item, i) => (
-          <li key={i}>
+          <li className="list-group-item" key={i}>
             <a href={`/todos/${item._id}`}>{item.title}</a>
+            <p>{item.body}</p>
           </li>
         ))}
       </ul>
