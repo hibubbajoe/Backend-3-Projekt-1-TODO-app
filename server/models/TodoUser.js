@@ -3,10 +3,6 @@ const Schema = mongoose.Schema;
 const bcrypt = require("bcrypt");
 
 const TodoUserSchema = new Schema({
-  name: {
-    type: String,
-    required: true
-  },
   password: {
     type: String,
     required: true
