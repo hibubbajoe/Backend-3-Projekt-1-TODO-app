@@ -6,10 +6,8 @@ var cors = require("cors");
 var mongoose = require("mongoose");
 require('dotenv').config();
 
-var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
-var apiRouter = require("./routes/api");
-// var todoApiRouter = require("./routes/TodoApi");
+var usersRoutes = require("./routes/users");
+var todosRoutes = require("./routes/todos");
 
 var app = express();
 
@@ -26,9 +24,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", indexRouter);
-app.use("/api", apiRouter);
-app.use("/users", usersRouter);
-// app.use("/todo", todoApiRouter);
+app.use("/api/todos", todosRoutes);
+app.use("/api/users", usersRoutes);
 
 module.exports = app;
