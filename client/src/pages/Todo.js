@@ -1,7 +1,7 @@
 // import { response } from 'express';
 import React, { useEffect, useState } from "react";
 // import axios from "axios";
-import todoFetches from "../fetches/TodoFetches";
+import api from "../api/api";
 
 export default function Todo() {
   // FETCH ITEMS
@@ -15,7 +15,7 @@ export default function Todo() {
     e.preventDefault();
     const payload = { title, body };
 
-    await todoFetches
+    await api
       .insertTodo(payload)
       .then(res => {
         setTitle("");
@@ -25,7 +25,7 @@ export default function Todo() {
   };
 
   function fetchData() {
-    todoFetches.getAllTodos().then(res => setData(res.data));
+    api.getAllTodos().then(res => setData(res.data));
   }
 
   useEffect(() => {
