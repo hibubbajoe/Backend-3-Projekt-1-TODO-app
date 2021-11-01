@@ -3,14 +3,14 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt')
 
 exports.getUser = (req, res) => {
-    console("getuser");
+    console.log("getuser");
     res.send("getuser");
 }
 
 exports.addNewUser = async (req, res) => {
     const data = req.body;
-    const user = await new TodoUser(data);
 
+    const user = await new TodoUser(data);
     try {
         if (!user) res.sendStatus(400);
         const newUser = await user.save();
@@ -48,5 +48,4 @@ exports.loginUser = async (req, res) => {
     } catch (err) {
         res.status(500).send();
     }
-
 };
