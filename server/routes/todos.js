@@ -1,52 +1,21 @@
 var express = require("express");
 var router = express.Router();
-var Todo = require("../models/Todo");
+var { createTodo, getTodoById, getUserTodos, updateTodo, deleteTodo } = require("../controllers/todos");
+var authUser = require("../middlewares/authUser")
 
 /* GET ALL ITEMS */
-router.get("/", function (req, res, next) {
-  Todo.find().exec((err, todos) => {
-    res.json(todos);
-  });
-});
+router.get("/", getUserTodos);
 
 /* GET ITEM BY ID */
-router.get("/:id", function (req, res, next) {
-  itemId = req.params.id;
-
-  Todo.findOne({ _id: itemId }).exec((err, todo) => {
-    res.json(todo);
-  });
-});
+router.get("/:id", authUser, getTodoById);
 
 /* ADD NEW TODO ITEM */
-router.post("/", function (req, res, next) {
-  const newTodo = {
-    title: req.body.title,
-    body: req.body.body
-  };
+router.post("/", authUser, createTodo);
 
-  const todo = new Todo(newTodo);
-  todo.save().then(todo => res.json(todo));
-});
-
-router.post("/:id", function (req, res, next) {
-  const id = req.params.id;
-  const { title, body } = req.body;
-
-  Todo.findOne({ _id: req.params.id }, (err, todo) => {
-    todo.title = title
-    todo.body = body
-    todo.save()
-  })
-})
+/* UPDATE ITEM BY ID */
+router.post("/:id", authUser, updateTodo)
 
 /* DELETE  ITEM BY ID */
-router.delete("/:id", function (req, res, next) {
-  const itemId = req.params.id;
-
-  Todo.findOneAndDelete({ _id: itemId }).exec((err, todo) => {
-    res.json(todo);
-  });
-});
+router.delete("/:id", authUser, deleteTodo);
 
 module.exports = router;
