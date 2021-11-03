@@ -1,12 +1,16 @@
 import axios from "axios";
+import { getToken } from "../utils/tokenHandlers"
+
 
 const url = axios.create({
-  baseURL: "http://localhost:5000/api"
+  baseURL: "http://localhost:5000/api",
+  headers: { token: getToken() }
 });
+
 
 //TODO endpoints
 export const insertTodo = payload => url.post(`/todos`, payload);
-export const getAllTodos = () => url.get("/todos");
+export const getUserTodos = () => url.get(`/todos`);
 export const getSingleTodo = id => url.get(`/todos/${id}`);
 export const deleteTodoById = id => url.delete(`/todos/${id}`);
 export const editTodoById = (payload, id) => url.post(`/todos/${id}`, payload);
@@ -17,7 +21,7 @@ export const addNewUser = payload => url.post("/users", payload);
 
 const api = {
   insertTodo,
-  getAllTodos,
+  getUserTodos,
   getSingleTodo,
   deleteTodoById,
   editTodoById,
