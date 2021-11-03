@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import todoFetches from "../fetches/TodoFetches";
+import api from "../api/api";
 import { ModalBox } from './Styles/AddModal';
 import moment from 'moment';
 
@@ -15,7 +15,9 @@ import {
     TextField,
     Modal,
     Grid,
-    MenuItem
+    MenuItem,
+    CardActionArea,
+    Select
 } from '@mui/material';
 
 const style = {
@@ -32,62 +34,58 @@ const style = {
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
-
 };
 export default function LandingPage() {
     // FETCH ITEMS
     const [data, setData] = useState([]);
 
     // NEW ITEM
-    const [title, setTitle] = useState("");
-    const [body, setBody] = useState("");
+    const [todoValue, setTodoValue] = useState({});
+    const [category, setCategory] = useState({});
 
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-
+    const categories = [
+        ...new Set(data.map((item) => item.category)),
+    ]
 
     const onSubmit = async e => {
         e.preventDefault();
-        const payload = { title, body };
-
-        await todoFetches
-            .insertTodo(payload)
-            .then(res => {
-                setTitle("");
-                setBody("");
-            })
-            .then(fetchData());
+        await api.insertTodo(todoValue)
+        setTodoValue({})
+        fetchData()
+        handleClose()
     };
 
-    const handleOnDragEnd = (result) => {
-        if (!result.destination) return;
-        const items = Array.from(data);
-        const [reorderedItem] = items.splice(result.source.index, 1);
-        items.splice(result.destination.index, 0, reorderedItem);
-        setData(items)
-    }
-
     function fetchData() {
-        todoFetches.getAllTodos().then(res => setData(res.data));
-    }
+        api.getUserTodos().then(res => setData(res.data));
+    };
 
     useEffect(() => {
         fetchData();
     }, []);
 
-    const onChange = e => {
-        if (e.target.name === "body") {
-            setBody(e.target.value);
-        } else if (e.target.name === "title") {
-            setTitle(e.target.value);
-        }
-    };
+    const handleCategories = (e) => {
+        setCategory(e.target.value)
+        setTodoValue({
+            ...todoValue,
+            'category': e.target.value
+        })
+    }
+
+    const handleOnChange = (e) => {
+        e.preventDefault();
+
+        setTodoValue({
+            ...todoValue,
+            [e.target.name]: e.target.value
+        })
+    }
 
     return (
         <>
             <main>
-                {/* Hero unit */}
                 <Box
                     sx={{
                         bgcolor: 'background.pper',
@@ -120,34 +118,31 @@ export default function LandingPage() {
                             spacing={2}
                             justifyContent="center"
                         >
-                            <Button variant="outlined" onClick={handleOpen}>Add me</Button>
+                            <Button variant="outlined" onClick={handleOpen}>Add todo</Button>
                         </Stack>
                     </Container>
                 </Box>
                 <Container sx={{ py: 8 }} maxWidth="md">
-                    {/* End hero unit */}
                     <Grid sx={{ width: '100%' }}>
-                        {data && data.map((card, index) => {
+                        {data && data.map((card) => {
                             return (
+                                <Card key={card._id} sx={{ m: 0.5 }}>
+                                    <CardActionArea href={`/todos/${card._id}`}>
+                                        <CardContent>
+                                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                <Typography variant="h5" component="div">
+                                                    {card.title}
+                                                </Typography>
+                                                <Typography variant="body2" component="div">
+                                                    {moment(card.published).format('LL')}
+                                                </Typography>
+                                            </Box>
+                                            <Typography sx={{ m: 1 }} variant="body2">
+                                                {card.body}
+                                            </Typography>
+                                        </CardContent>
 
-                                <Card sx={{ m: 0.5 }}>
-                                    <CardContent>
-                                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                            <Typography variant="h5" component="div">
-                                                {card.title}
-                                            </Typography>
-                                            <Typography variant="body2" component="div">
-                                                {moment(card.published).format('LL')}
-                                            </Typography>
-                                        </Box>
-                                        <Typography sx={{ m: 1 }} variant="body2">
-                                            {card.body}
-                                        </Typography>
-                                    </CardContent>
-                                    <CardActions>
-                                        <Button size="small">Edit</Button>
-                                        <Button size="small">View</Button>
-                                    </CardActions>
+                                    </CardActionArea>
                                 </Card>
                             )
                         })}
@@ -159,19 +154,19 @@ export default function LandingPage() {
                     aria-labelledby="modal-modal-title"
                     aria-describedby="modal-modal-description"
                 >
-                    <ModalBox sx={style}>
+                    <ModalBox component="form" sx={style}>
                         <Typography component="h1"
                             variant="h6"
                             align="center"
                             color="text.primary"
                             gutterBottom>What do you want todo</Typography>
-                        <TextField sx={{ width: '100%', m: 0.5 }} variant="outlined" label="Title" />
-                        <TextField sx={{ width: '100%', m: 0.5 }} variant="outlined" label="Description" />
-                        <TextField sx={{ width: '100%', m: 0.5 }} variant="outlined" label="Type of todo" select >
-                            {data.map((option) => {
-                                return <MenuItem key={option.category} value={option.category}>{option.category}</MenuItem>
+                        <TextField sx={{ width: '100%', m: 0.5 }} variant="outlined" name="title" label="Title" onChange={handleOnChange} />
+                        <TextField sx={{ width: '100%', m: 0.5 }} variant="outlined" name="body" label="Description" onChange={handleOnChange} />
+                        <Select sx={{ width: '100%', m: 0.5 }} variant="outlined" value={category} label="Type of todo" onChange={handleCategories}>
+                            {categories.map((option, i) => {
+                                return <MenuItem key={i} value={option}>{option}</MenuItem>
                             })}
-                        </ TextField >
+                        </ Select >
                         <Button variant="outlined" sx={{ width: '50%', m: 0.5 }} onClick={onSubmit}>Add</Button>
                     </ModalBox>
                 </Modal>
