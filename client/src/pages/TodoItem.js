@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import todoFetches from "../fetches/TodoFetches";
+import api from "../api/api";
 import { useHistory } from "react-router-dom";
+import { Box } from '@mui/material';
 
 export default function TodoItem(props) {
   const id = props.match.params.id;
@@ -22,13 +23,13 @@ export default function TodoItem(props) {
     e.preventDefault();
     const payload = { title, body };
 
-    todoFetches
+    api
       .editTodoById(payload, id)
       .then(() => history.push("/todos"))
   }
 
   useEffect(() => {
-    todoFetches.getSingleTodo(id).then(res => {
+    api.getSingleTodo(id).then(res => {
       setTitle(res.data.title);
       setBody(res.data.body);
     });
@@ -36,7 +37,7 @@ export default function TodoItem(props) {
 
 
   function deleteTodo() {
-    todoFetches.deleteTodoById(id).then(() => history.push("/todos"));
+    api.deleteTodoById(id).then(() => history.push("/todos"));
     console.log(id);
   }
 

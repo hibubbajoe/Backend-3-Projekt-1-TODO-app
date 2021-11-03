@@ -4,20 +4,16 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var cors = require("cors");
 var mongoose = require("mongoose");
+require('dotenv').config();
 
-var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
-var apiRouter = require("./routes/api");
-// var todoApiRouter = require("./routes/TodoApi");
+var todosRoutes = require("./routes/todos");
+var usersRoutes = require("./routes/users");
 
 var app = express();
 
-// DB Config
-var db = require("./config/keys").mongoURI;
-
 // Connection to Mongo
 mongoose
-  .connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("MongoDB Connected..."))
   .catch(err => console.log(err));
 
@@ -28,9 +24,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", indexRouter);
-app.use("/api", apiRouter);
-app.use("/users", usersRouter);
-// app.use("/todo", todoApiRouter);
+app.use("/api/todos", todosRoutes);
+app.use("/api/users", usersRoutes);
 
 module.exports = app;

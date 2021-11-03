@@ -2,6 +2,8 @@ import "./App.css";
 import React from "react";
 import Todo from "./pages/Todo";
 import TodoItem from "./pages/TodoItem";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 import { BrowserRouter as Router, Link, Switch, Route } from "react-router-dom";
 
 function App() {
@@ -9,6 +11,8 @@ function App() {
     <div>
       <Switch>
         <Route path="/todos/:id" component={TodoItem} />
+        <Route path="/login" component={Login} />
+        <Route path="/register" component={Register} />
         <Route path="/">
           <Todo />
         </Route>
