@@ -25,7 +25,7 @@ export default function Todo() {
   };
 
   function fetchData() {
-    api.getAllTodos().then(res => setData(res.data));
+    api.getUserTodos().then(res => setData(res.data));
   }
 
   useEffect(() => {
@@ -56,7 +56,7 @@ export default function Todo() {
         <input type="submit" value="Add new todo" />
       </form>
       <ul>
-        {data.map((item, i) => (
+        {data && data.map((item, i) => (
           <li key={i}>
             <a href={`/todos/${item._id}`}>{item.title}</a>
           </li>
