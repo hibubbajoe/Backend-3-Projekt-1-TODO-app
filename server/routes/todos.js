@@ -4,7 +4,7 @@ var { createTodo, getTodoById, getUserTodos, updateTodo, deleteTodo } = require(
 var authUser = require("../middlewares/authUser")
 
 /* GET ALL ITEMS */
-router.get("/", getUserTodos);
+router.get("/", authUser, getUserTodos);
 
 /* GET ITEM BY ID */
 router.get("/:id", authUser, getTodoById);
