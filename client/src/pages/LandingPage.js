@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import todoFetches from "../fetches/TodoFetches";
+import { ModalBox } from './Styles/AddModal';
 import moment from 'moment';
 
 import {
@@ -126,43 +126,32 @@ export default function LandingPage() {
                 </Box>
                 <Container sx={{ py: 8 }} maxWidth="md">
                     {/* End hero unit */}
-                    <DragDropContext onDragEnd={handleOnDragEnd}>
-                        <Droppable droppableId={'data'}>
-                            {(provided) => (
-                                <Grid sx={{ width: '100%' }} {...provided.droppableProps} ref={provided.innerRef}>
-                                    {data && data.map((card, index) => {
-                                        return (
-                                            <Draggable key={card._id} draggableId={card._id} index={index}>
-                                                {(provided) => (
-                                                    <Card sx={{ m: 0.5 }} {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
-                                                        <CardContent>
-                                                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                                <Typography variant="h5" component="div">
-                                                                    {card.title}
-                                                                </Typography>
-                                                                <Typography variant="body2" component="div">
-                                                                    {moment(card.published).format('LL')}
-                                                                </Typography>
-                                                            </Box>
-                                                            <Typography sx={{ m: 1 }} variant="body2">
-                                                                {card.body}
-                                                            </Typography>
-                                                        </CardContent>
-                                                        <CardActions>
-                                                            <Button size="small">Edit</Button>
-                                                            <Button size="small">View</Button>
-                                                        </CardActions>
-                                                    </Card>
-                                                )}
-                                            </Draggable>
-                                        );
-                                    })}
-                                    {provided.placeholder}
-                                </Grid>
+                    <Grid sx={{ width: '100%' }}>
+                        {data && data.map((card, index) => {
+                            return (
 
-                            )}
-                        </Droppable>
-                    </DragDropContext >
+                                <Card sx={{ m: 0.5 }}>
+                                    <CardContent>
+                                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                            <Typography variant="h5" component="div">
+                                                {card.title}
+                                            </Typography>
+                                            <Typography variant="body2" component="div">
+                                                {moment(card.published).format('LL')}
+                                            </Typography>
+                                        </Box>
+                                        <Typography sx={{ m: 1 }} variant="body2">
+                                            {card.body}
+                                        </Typography>
+                                    </CardContent>
+                                    <CardActions>
+                                        <Button size="small">Edit</Button>
+                                        <Button size="small">View</Button>
+                                    </CardActions>
+                                </Card>
+                            )
+                        })}
+                    </Grid>
                 </Container>
                 <Modal
                     open={open}
@@ -170,7 +159,7 @@ export default function LandingPage() {
                     aria-labelledby="modal-modal-title"
                     aria-describedby="modal-modal-description"
                 >
-                    <Box sx={style}>
+                    <ModalBox sx={style}>
                         <Typography component="h1"
                             variant="h6"
                             align="center"
@@ -184,7 +173,7 @@ export default function LandingPage() {
                             })}
                         </ TextField >
                         <Button variant="outlined" sx={{ width: '50%', m: 0.5 }} onClick={onSubmit}>Add</Button>
-                    </Box>
+                    </ModalBox>
                 </Modal>
             </main>
         </>
