@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import { useHistory } from "react-router-dom"
 import { Container, Button, TextField, Link, Grid, Box, Typography } from '@mui/material';
 import { loginUser } from '../api/api';
+import { setToken } from "../utils/tokenHandlers"
 
 export default function Login() {
+  const history = useHistory();
 
   const [loginValue, setLoginValue] = useState({})
 
@@ -18,8 +21,9 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const user = await loginUser(loginValue);
-    localStorage.setItem('token', user.data);
-    console.log(user.data);
+    setToken(user.data)
+    console.log(user);
+    history.push(`/todos`)
   };
 
   return (
