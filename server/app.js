@@ -6,8 +6,8 @@ var cors = require("cors");
 var mongoose = require("mongoose");
 require('dotenv').config();
 
-var usersRoutes = require("./routes/users");
 var todosRoutes = require("./routes/todos");
+var usersRoutes = require("./routes/users");
 
 var app = express();
 
