@@ -19,12 +19,12 @@ const TodoSchema = new Schema({
     type: String,
     default: "Allmänt",
     required: true
+  },
+  author: {
+    type: Schema.Types.ObjectId,
+    ref: "TodoUser",
+    required: true
   }
-  // author: {
-  //   type: Schema.Types.ObjectId,
-  //   ref: "User",
-  //   required: true
-  // }
 });
 
 module.exports = mongoose.model("Todo", TodoSchema);
