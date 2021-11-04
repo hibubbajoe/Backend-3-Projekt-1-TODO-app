@@ -17,7 +17,9 @@ import {
     Grid,
     MenuItem,
     CardActionArea,
-    Select
+    Select,
+    Collapse,
+    InputBase
 } from '@mui/material';
 
 const style = {
@@ -35,6 +37,7 @@ const style = {
     boxShadow: 24,
     p: 4,
 };
+
 export default function LandingPage() {
     // FETCH ITEMS
     const [data, setData] = useState([]);
@@ -42,20 +45,39 @@ export default function LandingPage() {
     // NEW ITEM
     const [todoValue, setTodoValue] = useState({});
     const [category, setCategory] = useState({});
+    const [card, setCard] = useState({});
 
+    const [collapse, setCollapse] = useState(false)
     const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+
     const categories = [
         ...new Set(data.map((item) => item.category)),
     ]
 
-    const onSubmit = async e => {
+    const handleOpen = (card) => {
+        setTodoValue(card);
+        setOpen(true);
+    }
+
+    const handleClose = () => {
+        setCard({})
+        setOpen(false);
+    }
+
+    const insertSubmit = async (e) => {
         e.preventDefault();
-        await api.insertTodo(todoValue)
+        await api.insertTodo(todoValue);
         setTodoValue({})
         fetchData()
-        handleClose()
+        setCollapse(false);
+    };
+
+    const updateSubmit = async (e) => {
+        e.preventDefault();
+        await api.editTodoById(todoValue, todoValue._id);
+        // setTodoValue({})
+        // fetchData()
+        // setCollapse(false);
     };
 
     function fetchData() {
@@ -65,6 +87,7 @@ export default function LandingPage() {
     useEffect(() => {
         fetchData();
     }, []);
+
 
     const handleCategories = (e) => {
         setCategory(e.target.value)
@@ -88,7 +111,7 @@ export default function LandingPage() {
             <main>
                 <Box
                     sx={{
-                        bgcolor: 'background.pper',
+                        bgcolor: 'background.paper',
                         pt: 8,
                         pb: 6,
                     }}
@@ -103,23 +126,28 @@ export default function LandingPage() {
                         >
                             Todos
                         </Typography>
-                        <Typography
-                            component="h1"
-                            variant="h6"
-                            align="center"
-                            color="text.primary"
-                            gutterBottom
+
+                        <Card
+                            sx={{ width: '100%', borderRadius: '10px', shadow: 1 }}
                         >
-                            Please add more todos
-                        </Typography>
-                        <Stack
-                            sx={{ pt: 4 }}
-                            direction="row"
-                            spacing={2}
-                            justifyContent="center"
-                        >
-                            <Button variant="outlined" onClick={handleOpen}>Add todo</Button>
-                        </Stack>
+                            <Box component="form">
+                                <Collapse in={collapse}>
+                                    <InputBase sx={{ width: '80%', m: 0.5 }} variant="outlined" name="title" placeholder="Title" autoComplete='off' onChange={handleOnChange} />
+                                </Collapse>
+                                <InputBase sx={{ width: '80%', m: 0.5, }} name="body" variant="standard " placeholder="Add a new todo..." autoComplete='off'
+                                    onChange={handleOnChange} onClick={() => setCollapse(true)}
+                                />
+                                <Collapse in={collapse}>
+                                    <Select sx={{ width: '80%', m: 0.5 }} variant="outlined" value={category} label="Type of todo" onChange={handleCategories}>
+                                        {categories.map((option, i) => {
+                                            return <MenuItem key={i} value={option}>{option}</MenuItem>
+                                        })}
+                                    </ Select >
+                                    <Button onClick={() => setCollapse(false)}>Close</Button>
+                                    <Button onClick={insertSubmit}>Add note</Button>
+                                </Collapse>
+                            </Box>
+                        </Card>
                     </Container>
                 </Box>
                 <Container sx={{ py: 8 }} maxWidth="md">
@@ -127,7 +155,7 @@ export default function LandingPage() {
                         {data && data.map((card) => {
                             return (
                                 <Card key={card._id} sx={{ m: 0.5 }}>
-                                    <CardActionArea href={`/todos/${card._id}`}>
+                                    <CardActionArea onClick={() => handleOpen(card)}>
                                         <CardContent>
                                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                                 <Typography variant="h5" component="div">
@@ -160,14 +188,14 @@ export default function LandingPage() {
                             align="center"
                             color="text.primary"
                             gutterBottom>What do you want todo</Typography>
-                        <TextField sx={{ width: '100%', m: 0.5 }} variant="outlined" name="title" label="Title" onChange={handleOnChange} />
-                        <TextField sx={{ width: '100%', m: 0.5 }} variant="outlined" name="body" label="Description" onChange={handleOnChange} />
+                        <TextField sx={{ width: '100%', m: 0.5 }} variant="outlined" name="title" value={todoValue.title} label="Title" onChange={handleOnChange} />
+                        <TextField sx={{ width: '100%', m: 0.5 }} variant="outlined" name="body" value={todoValue.body} label="Description" onChange={handleOnChange} />
                         <Select sx={{ width: '100%', m: 0.5 }} variant="outlined" value={category} label="Type of todo" onChange={handleCategories}>
                             {categories.map((option, i) => {
                                 return <MenuItem key={i} value={option}>{option}</MenuItem>
                             })}
                         </ Select >
-                        <Button variant="outlined" sx={{ width: '50%', m: 0.5 }} onClick={onSubmit}>Add</Button>
+                        <Button variant="outlined" sx={{ width: '50%', m: 0.5 }} onClick={updateSubmit}>Update todo</Button>
                     </ModalBox>
                 </Modal>
             </main>
