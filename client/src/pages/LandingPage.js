@@ -41,18 +41,20 @@ const style = {
 export default function LandingPage() {
     // FETCH ITEMS
     const [data, setData] = useState([]);
+    const [categories, setCategories] = useState([]);
 
     // NEW ITEM
     const [todoValue, setTodoValue] = useState({});
     const [category, setCategory] = useState({});
     const [card, setCard] = useState({});
+    const [todos, setTodos] = useState([]);
 
     const [collapse, setCollapse] = useState(false)
     const [open, setOpen] = useState(false);
 
-    const categories = [
-        ...new Set(data.map((item) => item.category)),
-    ]
+    // const categories = [
+    //     ...new Set(data.map((item) => item.category)),
+    // ]
 
     const handleOpen = (card) => {
         setTodoValue(card);
@@ -82,11 +84,27 @@ export default function LandingPage() {
 
     function fetchData() {
         api.getUserTodos().then(res => setData(res.data));
+        setTodos(data);
+        api.getUserCategories().then(res => setCategories(res.data));
     };
+
+    const filterCategories = category => {
+        console.log(category);
+
+        const filteredTodos = data.filter(todo => todo.category === category._id)
+        setTodos(filteredTodos);
+    }
+
 
     useEffect(() => {
         fetchData();
     }, []);
+
+    console.log(todos);
+
+    // useEffect(() => {
+    //     console.log(categories);
+    // }, [categories])
 
 
     const handleCategories = (e) => {
@@ -140,7 +158,7 @@ export default function LandingPage() {
                                 <Collapse in={collapse}>
                                     <Select sx={{ width: '80%', m: 0.5 }} variant="outlined" value={category} label="Type of todo" onChange={handleCategories}>
                                         {categories.map((option, i) => {
-                                            return <MenuItem key={i} value={option}>{option}</MenuItem>
+                                            return <MenuItem key={i} value={option.category}>{option.category}</MenuItem>
                                         })}
                                     </ Select >
                                     <Button onClick={() => setCollapse(false)}>Close</Button>
@@ -150,9 +168,17 @@ export default function LandingPage() {
                         </Card>
                     </Container>
                 </Box>
+                <Box>
+                    <button onClick={() => setTodos(data)}>Todos</button>
+                    {categories.map((category, index) => {
+                        return (
+                            <button onClick={() => filterCategories(category)}>{category.category}</button>
+                        )
+                    })}
+                </Box>
                 <Container sx={{ py: 8 }} maxWidth="md">
                     <Grid sx={{ width: '100%' }}>
-                        {data && data.map((card) => {
+                        {todos && todos.map((card) => {
                             return (
                                 <Card key={card._id} sx={{ m: 0.5 }}>
                                     <CardActionArea onClick={() => handleOpen(card)}>
@@ -192,7 +218,7 @@ export default function LandingPage() {
                         <TextField sx={{ width: '100%', m: 0.5 }} variant="outlined" name="body" value={todoValue.body} label="Description" onChange={handleOnChange} />
                         <Select sx={{ width: '100%', m: 0.5 }} variant="outlined" value={category} label="Type of todo" onChange={handleCategories}>
                             {categories.map((option, i) => {
-                                return <MenuItem key={i} value={option}>{option}</MenuItem>
+                                return <MenuItem key={option._id} value={option.category}>{option.category}</MenuItem>
                             })}
                         </ Select >
                         <Button variant="outlined" sx={{ width: '50%', m: 0.5 }} onClick={updateSubmit}>Update todo</Button>
