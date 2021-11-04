@@ -23,7 +23,7 @@ export default function Login() {
     const user = await loginUser(loginValue);
     setToken(user.data)
     console.log(user);
-    history.push(`/todos`)
+    history.push(`/`)
   };
 
   return (
