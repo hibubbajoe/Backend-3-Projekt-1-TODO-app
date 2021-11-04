@@ -35,11 +35,12 @@ exports.getUserTodos = (req, res) => {
 
 exports.updateTodo = (req, res) => {
     const id = req.params.id;
-    const { title, body } = req.body;
+    const { title, body, category } = req.body;
 
     Todo.findOne({ _id: req.params.id }, (err, todo) => {
         todo.title = title
         todo.body = body
+        todo.category = category
         todo.save()
     })
 }
