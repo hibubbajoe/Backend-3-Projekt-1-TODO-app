@@ -4,11 +4,13 @@ var checkUser = require("../utils/checkUser");
 exports.createTodo = (req, res) => {
     const userToken = req.headers.token;
     const userId = checkUser(userToken);
+    console.log(req.body);
 
     const newTodo = {
         title: req.body.title,
         body: req.body.body,
-        author: userId
+        category: req.body.category,
+        author: userId,
     };
 
     const todo = new Todo(newTodo);

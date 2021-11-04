@@ -16,9 +16,8 @@ const TodoSchema = new Schema({
     required: true
   },
   category: {
-    type: String,
-    default: "Allmänt",
-    required: true
+    type: Schema.Types.ObjectId,
+    ref: "TodoCategory"
   },
   author: {
     type: Schema.Types.ObjectId,
