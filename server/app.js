@@ -8,6 +8,7 @@ require('dotenv').config();
 
 var todosRoutes = require("./routes/todos");
 var usersRoutes = require("./routes/users");
+var categoriesRoutes = require("./routes/categories");
 
 var app = express();
 
@@ -26,5 +27,6 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/api/todos", todosRoutes);
 app.use("/api/users", usersRoutes);
+app.use("/api/categories", categoriesRoutes);
 
 module.exports = app;
