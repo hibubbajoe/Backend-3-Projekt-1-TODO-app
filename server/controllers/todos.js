@@ -36,14 +36,16 @@ exports.getUserTodos = (req, res) => {
     });
 }
 
-exports.updateTodo = (req, res) => {
+exports.updateTodo = async (req, res) => {
     const id = req.params.id;
     const { title, body, category } = req.body;
+    const matchingCategory = await TodoCategory.findOne({ category: category }).exec();
+
 
     Todo.findOne({ _id: req.params.id }, (err, todo) => {
         todo.title = title
         todo.body = body
-        todo.category = category
+        todo.category = matchingCategory._id
         todo.save()
     })
 }
