@@ -1,15 +1,16 @@
 var Todo = require("../models/Todo");
+var TodoCategory = require("../models/TodoCategory");
 var checkUser = require("../utils/checkUser");
 
-exports.createTodo = (req, res) => {
+exports.createTodo = async (req, res) => {
     const userToken = req.headers.token;
     const userId = checkUser(userToken);
-    console.log(req.body);
+    const matchingCategory = await TodoCategory.findOne({ category: req.body.category }).exec();
 
     const newTodo = {
         title: req.body.title,
         body: req.body.body,
-        category: req.body.category,
+        category: matchingCategory._id,
         author: userId,
     };
 
