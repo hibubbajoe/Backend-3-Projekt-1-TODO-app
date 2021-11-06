@@ -176,11 +176,11 @@ export default function LandingPage() {
                         </Card>
                     </Container>
                 </Box>
-                <Box>
-                    <button onClick={() => setTodos(data)}>Todos</button>
+                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button variant="outlined" sx={{ width: '10%', m: 0.5 }} onClick={() => setTodos(data)}>Todos</Button>
                     {categories.map((category, index) => {
                         return (
-                            <button onClick={() => filterCategories(category)}>{category.category}</button>
+                            <Button variant="outlined" sx={{ width: '10%', m: 0.5 }} onClick={() => filterCategories(category)}>{category.category}</Button>
                         )
                     })}
                 </Box>
