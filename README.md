@@ -80,7 +80,7 @@ Once in the client directory run:
 
 Runs the app in the development mode.
 
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+To view the app locally go to: [http://localhost:3000](http://localhost:3000).
 
 ## Start server side
 In the project directory run:
@@ -88,11 +88,11 @@ In the project directory run:
 In the backend directory run:
 `npx nodemon start`
 
-# Deployment
-## Frontend deployed at
+# Deploy
+## Frontend
 [Enter link after deployment]
 
-## Backend deployed at
+## Backend
 [Enter link after deployment]
 
 # Testing
