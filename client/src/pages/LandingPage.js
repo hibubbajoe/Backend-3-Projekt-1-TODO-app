@@ -169,7 +169,7 @@ export default function LandingPage() {
                                     <Collapse in={collapse}>
                                         <InputBase sx={{ width: '80%', m: 0.5 }} variant="outlined" name="title" placeholder="Title" autoComplete='off' onChange={handleOnChange} />
                                     </Collapse>
-                                    <InputBase sx={{ width: '80%', m: 0.5, }} name="body" variant="standard " placeholder="Add a new todo..." autoComplete='off'
+                                    <InputBase sx={{ width: '80%', m: 0.5, }} name="body" variant="standard " placeholder="Add a new todo..." autoComplete='off' required
                                         onChange={handleOnChange} onClick={() => setCollapse(true)}
                                     />
                                     <Collapse in={collapse}>
@@ -197,7 +197,7 @@ export default function LandingPage() {
                                                             {card.title}
                                                         </Typography>
                                                         <Typography variant="body2" component="div">
-                                                            {moment(card.published).format('LL')}
+                                                            {moment(card.updatedAt).format('lll')}
                                                         </Typography>
                                                     </Box>
                                                     <Typography sx={{ m: 1 }} variant="body2">
@@ -257,7 +257,7 @@ export default function LandingPage() {
                             color="text.primary"
                             gutterBottom>What do you want todo</Typography>
                         <TextField sx={{ width: '100%', m: 0.5 }} variant="outlined" name="title" value={todoValue.title} label="Title" onChange={handleOnChange} />
-                        <TextField sx={{ width: '100%', m: 0.5 }} variant="outlined" name="body" value={todoValue.body} label="Description" onChange={handleOnChange} />
+                        <TextField sx={{ width: '100%', m: 0.5 }} variant="outlined" name="body" value={todoValue.body} label="Description" onChange={handleOnChange} required />
                         <Select sx={{ width: '100%', m: 0.5 }} variant="outlined" value={category} label="Type of todo" onChange={handleCategories}>
                             {categories.map((option, i) => {
                                 return <MenuItem key={option._id} value={option.category}>{option.category}</MenuItem>
