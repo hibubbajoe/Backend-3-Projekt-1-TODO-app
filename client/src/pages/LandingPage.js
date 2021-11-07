@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import LightbulbOutlinedIcon from '@mui/icons-material/LightbulbOutlined';
+import CreateOutlinedIcon from '@mui/icons-material/Create';
+import LabelOutlinedIcon from '@mui/icons-material/Label';
 import api from "../api/api";
 import { ModalBox } from './Styles/AddModal';
+import { styled } from '@mui/styles';
 import moment from 'moment';
 
 import {
@@ -21,6 +25,7 @@ import {
     Collapse,
     InputBase
 } from '@mui/material';
+
 
 const style = {
     position: 'absolute',
@@ -46,15 +51,12 @@ export default function LandingPage() {
     // NEW ITEM
     const [todoValue, setTodoValue] = useState({});
     const [category, setCategory] = useState({});
-    const [card, setCard] = useState({});
     const [todos, setTodos] = useState([]);
+    const [activeBtn, setActiveBtn] = useState();
 
     const [collapse, setCollapse] = useState(false)
     const [open, setOpen] = useState(false);
 
-    // const categories = [
-    //     ...new Set(data.map((item) => item.category)),
-    // ]
 
     const handleOpen = (card) => {
         setTodoValue(card);
@@ -62,7 +64,6 @@ export default function LandingPage() {
     }
 
     const handleClose = () => {
-        setCard({})
         setOpen(false);
     }
 
@@ -88,11 +89,14 @@ export default function LandingPage() {
         api.getUserCategories().then(res => setCategories(res.data));
     };
 
-    const filterCategories = category => {
-        console.log(category);
+    const filterCategories = (e, category) => {
 
-        const filteredTodos = data.filter(todo => todo.category === category._id)
-        setTodos(filteredTodos);
+        setActiveBtn(e.target.id);
+        if (category.length > 0) setTodos(category)
+        else {
+            const filteredTodos = data.filter(todo => todo.category === category._id)
+            setTodos(filteredTodos);
+        }
     }
 
 
@@ -100,12 +104,7 @@ export default function LandingPage() {
         fetchData();
     }, []);
 
-    console.log(todos);
-
-    // useEffect(() => {
-    //     console.log(categories);
-    // }, [categories])
-
+    console.log(activeBtn)
 
     const handleCategories = (e) => {
         setCategory(e.target.value)
@@ -126,82 +125,94 @@ export default function LandingPage() {
 
     return (
         <>
-            <main>
-                <Box
-                    sx={{
-                        bgcolor: 'background.paper',
-                        pt: 8,
-                        pb: 6,
-                    }}
-                >
-                    <Container maxWidth="sm" >
-                        <Typography
-                            component="h1"
-                            variant="h2"
-                            align="center"
-                            color="text.primary"
-                            gutterBottom
-                        >
+            <Box sx={{ flexgrow: 1 }}>
+                <Grid container spacing={2}>
+                    <Grid item
+                        xs={12}
+
+                    >
+                        <Container maxWidth="sm" >
+                            <Typography
+                                component="h1"
+                                variant="h2"
+                                align="center"
+                                color="text.primary"
+                                gutterBottom
+                            >
+                                Todos
+                            </Typography>
+
+                            <Card
+                                sx={{ width: '100%', borderRadius: '10px', shadow: 1, border: 1, p: 1, pt: 2 }}
+                            >
+                                <Box component="form">
+                                    <Collapse in={collapse}>
+                                        <InputBase sx={{ width: '80%', m: 0.5 }} variant="outlined" name="title" placeholder="Title" autoComplete='off' onChange={handleOnChange} />
+                                    </Collapse>
+                                    <InputBase sx={{ width: '80%', m: 0.5, }} name="body" variant="standard " placeholder="Add a new todo..." autoComplete='off'
+                                        onChange={handleOnChange} onClick={() => setCollapse(true)}
+                                    />
+                                    <Collapse in={collapse}>
+                                        <Select sx={{ width: '80%', m: 0.5 }} variant="outlined" value={category} label="Type of todo" onChange={handleCategories}>
+                                            <MenuItem>
+                                                <InputBase value={'name'} />
+                                            </MenuItem>
+                                            {categories.map((option, i) => {
+                                                return <MenuItem key={i} value={option.category}>{option.category}</MenuItem>
+                                            })}
+                                        </ Select >
+                                        <Button onClick={() => setCollapse(false)}>Close</Button>
+                                        <Button onClick={insertSubmit}>Add note</Button>
+                                    </Collapse>
+                                </Box>
+                            </Card>
+                        </Container>
+
+                        <Container sx={{ py: 8 }} maxWidth="md">
+                            <Grid sx={{ width: '100%' }}>
+                                {todos && todos.map((card) => {
+                                    return (
+                                        <Card key={card._id} sx={{ m: 0.5 }}>
+                                            <CardActionArea onClick={() => handleOpen(card)}>
+                                                <CardContent>
+                                                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                        <Typography variant="h5" component="div">
+                                                            {card.title}
+                                                        </Typography>
+                                                        <Typography variant="body2" component="div">
+                                                            {moment(card.published).format('LL')}
+                                                        </Typography>
+                                                    </Box>
+                                                    <Typography sx={{ m: 1 }} variant="body2">
+                                                        {card.body}
+                                                    </Typography>
+                                                </CardContent>
+
+                                            </CardActionArea>
+                                        </Card>
+                                    )
+                                })}
+                            </Grid>
+                        </Container>
+                    </Grid>
+
+                    {/* SIDEBAR WITH FILTER FUNCTIONALITY*/}
+                    <Box xs={2} sx={{ position: 'absolute', top: '10%', display: 'flex', flexDirection: 'column', width: '20rem' }}>
+                        <Button id={'todos'} sx={{ color: 'black', justifyContent: 'flex-start', pl: 3, ':active': { color: 'pink' } }}
+                            onClick={(e) => filterCategories(e, data)}>
+                            <LightbulbOutlinedIcon />
                             Todos
-                        </Typography>
-
-                        <Card
-                            sx={{ width: '100%', borderRadius: '10px', shadow: 1 }}
-                        >
-                            <Box component="form">
-                                <Collapse in={collapse}>
-                                    <InputBase sx={{ width: '80%', m: 0.5 }} variant="outlined" name="title" placeholder="Title" autoComplete='off' onChange={handleOnChange} />
-                                </Collapse>
-                                <InputBase sx={{ width: '80%', m: 0.5, }} name="body" variant="standard " placeholder="Add a new todo..." autoComplete='off'
-                                    onChange={handleOnChange} onClick={() => setCollapse(true)}
-                                />
-                                <Collapse in={collapse}>
-                                    <Select sx={{ width: '80%', m: 0.5 }} variant="outlined" value={category} label="Type of todo" onChange={handleCategories}>
-                                        {categories.map((option, i) => {
-                                            return <MenuItem key={i} value={option.category}>{option.category}</MenuItem>
-                                        })}
-                                    </ Select >
-                                    <Button onClick={() => setCollapse(false)}>Close</Button>
-                                    <Button onClick={insertSubmit}>Add note</Button>
-                                </Collapse>
-                            </Box>
-                        </Card>
-                    </Container>
-                </Box>
-                <Box>
-                    <button onClick={() => setTodos(data)}>Todos</button>
-                    {categories.map((category, index) => {
-                        return (
-                            <button onClick={() => filterCategories(category)}>{category.category}</button>
-                        )
-                    })}
-                </Box>
-                <Container sx={{ py: 8 }} maxWidth="md">
-                    <Grid sx={{ width: '100%' }}>
-                        {todos && todos.map((card) => {
+                        </Button>
+                        {categories.map((category, index) => {
                             return (
-                                <Card key={card._id} sx={{ m: 0.5 }}>
-                                    <CardActionArea onClick={() => handleOpen(card)}>
-                                        <CardContent>
-                                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                <Typography variant="h5" component="div">
-                                                    {card.title}
-                                                </Typography>
-                                                <Typography variant="body2" component="div">
-                                                    {moment(card.published).format('LL')}
-                                                </Typography>
-                                            </Box>
-                                            <Typography sx={{ m: 1 }} variant="body2">
-                                                {card.body}
-                                            </Typography>
-                                        </CardContent>
-
-                                    </CardActionArea>
-                                </Card>
+                                <Button id={category.category} sx={{ color: 'black', justifyContent: 'flex-start', pl: 3 }} onClick={(e) => filterCategories(e, category)}><LabelOutlinedIcon />{category.category}</Button>
                             )
                         })}
-                    </Grid>
-                </Container>
+                        <Button sx={{ color: 'black', justifyContent: 'flex-start', pl: 3 }} onClick={() => alert('Knappen funkar inte för tillfället')}><CreateOutlinedIcon />Edit labels</Button>
+                    </Box>
+                </Grid>
+
+                {/* MODAL WITH EDIT FUNCTIONALITY */}
                 <Modal
                     open={open}
                     onClose={handleClose}
@@ -224,7 +235,7 @@ export default function LandingPage() {
                         <Button variant="outlined" sx={{ width: '50%', m: 0.5 }} onClick={updateSubmit}>Update todo</Button>
                     </ModalBox>
                 </Modal>
-            </main>
+            </Box>
         </>
     );
 }
