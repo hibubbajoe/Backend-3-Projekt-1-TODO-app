@@ -43,9 +43,9 @@ exports.updateTodo = async (req, res) => {
 
 
     Todo.findOne({ _id: req.params.id }, (err, todo) => {
-        todo.title = title
-        todo.body = body
-        todo.category = matchingCategory._id
+        todo.title = title ? title : ""
+        todo.body = body ? body : ""
+        todo.category = matchingCategory ? matchingCategory._id : null
         todo.save()
     })
 }
