@@ -8,6 +8,7 @@ import api from "../api/api";
 import { ModalBox } from './Styles/AddModal';
 import { styled } from '@mui/styles';
 import moment from 'moment';
+import ReactMarkdown from "react-markdown";
 
 import {
     Button,
@@ -169,9 +170,7 @@ export default function LandingPage() {
                                     <Collapse in={collapse}>
                                         <InputBase sx={{ width: '80%', m: 0.5 }} variant="outlined" name="title" placeholder="Title" autoComplete='off' onChange={handleOnChange} />
                                     </Collapse>
-                                    <InputBase sx={{ width: '80%', m: 0.5, }} name="body" variant="standard " placeholder="Add a new todo..." autoComplete='off' required
-                                        onChange={handleOnChange} onClick={() => setCollapse(true)}
-                                    />
+                                    <TextField sx={{ width: '80%', m: 0.5 }} multiline variant="outlined" name="body" label="Description" onChange={handleOnChange} onClick={() => setCollapse(true)} required />
                                     <Collapse in={collapse}>
                                         <Select sx={{ width: '80%', m: 0.5 }} variant="outlined" value={category} label="Type of todo" onChange={handleCategories}>
                                             {categories.map((option, i) => {
@@ -200,9 +199,9 @@ export default function LandingPage() {
                                                             {moment(card.updatedAt).format('lll')}
                                                         </Typography>
                                                     </Box>
-                                                    <Typography sx={{ m: 1 }} variant="body2">
+                                                    <ReactMarkdown>
                                                         {card.body}
-                                                    </Typography>
+                                                    </ReactMarkdown>
                                                 </CardContent>
 
                                             </CardActionArea>
@@ -257,7 +256,7 @@ export default function LandingPage() {
                             color="text.primary"
                             gutterBottom>What do you want todo</Typography>
                         <TextField sx={{ width: '100%', m: 0.5 }} variant="outlined" name="title" value={todoValue.title} label="Title" onChange={handleOnChange} />
-                        <TextField sx={{ width: '100%', m: 0.5 }} variant="outlined" name="body" value={todoValue.body} label="Description" onChange={handleOnChange} required />
+                        <TextField sx={{ width: '100%', m: 0.5 }} multiline variant="outlined" name="body" value={todoValue.body} label="Description" onChange={handleOnChange} required />
                         <Select sx={{ width: '100%', m: 0.5 }} variant="outlined" value={category} label="Type of todo" onChange={handleCategories}>
                             {categories.map((option, i) => {
                                 return <MenuItem key={option._id} value={option.category}>{option.category}</MenuItem>
