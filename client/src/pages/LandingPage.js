@@ -162,9 +162,6 @@ export default function LandingPage() {
                                     />
                                     <Collapse in={collapse}>
                                         <Select sx={{ width: '80%', m: 0.5 }} variant="outlined" value={category} label="Type of todo" onChange={handleCategories}>
-                                            <MenuItem>
-                                                <InputBase value={'name'} />
-                                            </MenuItem>
                                             {categories.map((option, i) => {
                                                 return <MenuItem key={i} value={option.category}>{option.category}</MenuItem>
                                             })}
@@ -206,14 +203,18 @@ export default function LandingPage() {
 
                     {/* SIDEBAR WITH FILTER FUNCTIONALITY*/}
                     <Box xs={2} sx={{ position: 'absolute', top: '10%', display: 'flex', flexDirection: 'column', width: '20rem' }}>
-                        <Button id={'todos'} sx={{ color: 'black', justifyContent: 'flex-start', pl: 3, ':active': { color: 'pink' } }}
+                        <Button id={'todos'} sx={{ color: 'black', justifyContent: 'flex-start', pl: 3, backgroundColor: activeBtn === 'todos' ? '#FDFD66' : '' }}
                             onClick={(e) => filterCategories(e, data)}>
                             <LightbulbOutlinedIcon />
                             Todos
                         </Button>
                         {categories.map((category, index) => {
                             return (
-                                <Button id={category.category} sx={{ color: 'black', justifyContent: 'flex-start', pl: 3 }} onClick={(e) => filterCategories(e, category)}><LabelOutlinedIcon />{category.category}</Button>
+                                <Button id={category.category}
+                                    sx={{ color: 'black', justifyContent: 'flex-start', pl: 3, backgroundColor: activeBtn === category.category ? '#FDFD66' : '' }}
+                                    onClick={(e) => filterCategories(e, category)}>
+                                    <LabelOutlinedIcon />{category.category}
+                                </Button>
                             )
                         })}
                         <Button sx={{ color: 'black', justifyContent: 'flex-start', pl: 3 }} onClick={() => alert('Knappen funkar inte för tillfället')}><CreateOutlinedIcon />Edit labels</Button>
@@ -244,7 +245,7 @@ export default function LandingPage() {
                         <Button variant="outlined" sx={{ width: '50%', m: 0.5, color: "red" }} onClick={deleteSubmit}>Delete todo</Button>
                     </ModalBox>
                 </Modal>
-            </Box>
+            </Box >
         </>
     );
 }
