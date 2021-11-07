@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import LightbulbOutlinedIcon from '@mui/icons-material/LightbulbOutlined';
 import CreateOutlinedIcon from '@mui/icons-material/Create';
 import LabelOutlinedIcon from '@mui/icons-material/Label';
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 import api from "../api/api";
 import { ModalBox } from './Styles/AddModal';
 import { styled } from '@mui/styles';
@@ -55,6 +57,7 @@ export default function LandingPage() {
     const [activeBtn, setActiveBtn] = useState();
 
     const [collapse, setCollapse] = useState(false)
+    const [categoryCollapse, setCategoryCollapse] = useState(false)
     const [open, setOpen] = useState(false);
 
 
@@ -89,6 +92,15 @@ export default function LandingPage() {
         // setTodoValue({})
         // fetchData()
         // setCollapse(false);
+    };
+
+    const insertCategory = async (e) => {
+        e.preventDefault();
+        console.log(category);
+        await api.addNewUserCategory({ "category": category });
+        setTodoValue({})
+        fetchData()
+        setCategoryCollapse(false);
     };
 
     function fetchData() {
@@ -202,7 +214,7 @@ export default function LandingPage() {
                     </Grid>
 
                     {/* SIDEBAR WITH FILTER FUNCTIONALITY*/}
-                    <Box xs={2} sx={{ position: 'absolute', top: '10%', display: 'flex', flexDirection: 'column', width: '20rem' }}>
+                    <Box xs={2} sx={{ position: 'absolute', top: '10%', display: 'flex', flexDirection: 'column', width: '15rem' }}>
                         <Button id={'todos'} sx={{ color: 'black', justifyContent: 'flex-start', pl: 3, backgroundColor: activeBtn === 'todos' ? '#FDFD66' : '' }}
                             onClick={(e) => filterCategories(e, data)}>
                             <LightbulbOutlinedIcon />
@@ -210,14 +222,24 @@ export default function LandingPage() {
                         </Button>
                         {categories.map((category, index) => {
                             return (
-                                <Button id={category.category}
-                                    sx={{ color: 'black', justifyContent: 'flex-start', pl: 3, backgroundColor: activeBtn === category.category ? '#FDFD66' : '' }}
-                                    onClick={(e) => filterCategories(e, category)}>
-                                    <LabelOutlinedIcon />{category.category}
-                                </Button>
+                                <Box sx={{ display: "flex", justifyContent: "space-between", backgroundColor: activeBtn === category.category ? '#FDFD66' : '' }}>
+                                    <Button id={category.category}
+                                        sx={{ color: 'black', justifyContent: 'flex-start', pl: 3 }}
+                                        onClick={(e) => filterCategories(e, category)}>
+                                        <LabelOutlinedIcon />{category.category}
+                                    </Button>
+                                    <Button onClick={() => api.deleteUserCategory(category._id)}>
+                                        <DeleteForeverOutlinedIcon sx={{ alignSelf: "center" }} />
+                                    </Button>
+                                </Box>
                             )
                         })}
-                        <Button sx={{ color: 'black', justifyContent: 'flex-start', pl: 3 }} onClick={() => alert('Knappen funkar inte för tillfället')}><CreateOutlinedIcon />Edit labels</Button>
+                        <Button sx={{ color: 'black', justifyContent: 'flex-start', pl: 3 }} onClick={() => setCategoryCollapse(!categoryCollapse)}><AddOutlinedIcon />Add category</Button>
+                        <Collapse in={categoryCollapse}>
+                            <InputBase sx={{ color: 'black', justifyContent: 'flex-start', pl: 3 }} variant="outlined" name="category" placeholder="category" autoComplete='off' onChange={handleCategories} />
+                            <Button sx={{ color: 'black', justifyContent: 'flex-start', pl: 3 }} onClick={insertCategory}>Add category</Button>
+
+                        </Collapse>
                     </Box>
                 </Grid>
 
