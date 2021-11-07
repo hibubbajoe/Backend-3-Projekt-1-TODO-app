@@ -83,6 +83,14 @@ export default function LandingPage() {
         // setCollapse(false);
     };
 
+    const deleteSubmit = async (e) => {
+        e.preventDefault();
+        await api.deleteTodoById(todoValue._id);
+        // setTodoValue({})
+        // fetchData()
+        // setCollapse(false);
+    };
+
     function fetchData() {
         api.getUserTodos().then(res => setData(res.data));
         setTodos(data);
@@ -233,6 +241,7 @@ export default function LandingPage() {
                             })}
                         </ Select >
                         <Button variant="outlined" sx={{ width: '50%', m: 0.5 }} onClick={updateSubmit}>Update todo</Button>
+                        <Button variant="outlined" sx={{ width: '50%', m: 0.5, color: "red" }} onClick={deleteSubmit}>Delete todo</Button>
                     </ModalBox>
                 </Modal>
             </Box>
