@@ -22,6 +22,7 @@ export const addNewUser = payload => url.post("/users", payload);
 //CATEGORY endpoints
 export const getUserCategories = () => url.get(`/categories`);
 export const addNewUserCategory = payload => url.post(`/categories`, payload);
+export const deleteUserCategory = (id) => url.delete(`/categories/${id}`);
 
 
 const api = {
@@ -33,7 +34,8 @@ const api = {
   addNewUser,
   loginUser,
   getUserCategories,
-  addNewUserCategory
+  addNewUserCategory,
+  deleteUserCategory
 };
 
 export default api;
