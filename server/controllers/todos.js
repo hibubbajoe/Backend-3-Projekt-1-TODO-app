@@ -5,12 +5,11 @@ var checkUser = require("../utils/checkUser");
 exports.createTodo = async (req, res) => {
     const userToken = req.headers.token;
     const userId = checkUser(userToken);
-    const matchingCategory = await TodoCategory.findOne({ category: req.body.category }).exec();
 
     const newTodo = {
         title: req.body.title,
         body: req.body.body,
-        category: matchingCategory._id,
+        category: req.body.category,
         author: userId,
     };
 
@@ -39,13 +38,11 @@ exports.getUserTodos = (req, res) => {
 exports.updateTodo = async (req, res) => {
     const id = req.params.id;
     const { title, body, category } = req.body;
-    const matchingCategory = await TodoCategory.findOne({ category: category }).exec();
-
 
     Todo.findOne({ _id: req.params.id }, (err, todo) => {
         todo.title = title ? title : ""
         todo.body = body ? body : ""
-        todo.category = matchingCategory ? matchingCategory._id : null
+        todo.category = req.body.category
         todo.save()
     })
 }
