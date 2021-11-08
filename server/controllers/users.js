@@ -1,6 +1,7 @@
 const TodoUser = require('../models/TodoUser');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt')
+const { checkNoEmptyFieldsOnRegistration } = require('../utils/userTests');
 
 exports.getUser = (req, res) => {
     console.log("getuser");
@@ -12,6 +13,10 @@ exports.addNewUser = async (req, res) => {
 
     const user = await new TodoUser(data);
     try {
+
+        if (!checkNoEmptyFieldsOnRegistration(res.body.email, req.body.password)) {
+            return res.sendStatus(400);
+        }
         if (!user) res.sendStatus(400);
         const newUser = await user.save();
         const token = jwt.sign(
