@@ -22,7 +22,6 @@ export default function Login() {
     e.preventDefault();
     const user = await loginUser(loginValue);
     setToken(user.data)
-    console.log(user);
     history.push(`/`)
   };
 
