@@ -29,7 +29,7 @@ export default function SideBar() {
       setCollapse(false);
       setTrigger(!trigger);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -40,7 +40,7 @@ export default function SideBar() {
       await deleteUserCategory(id);
       setTrigger(!trigger);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
