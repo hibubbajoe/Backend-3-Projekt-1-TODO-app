@@ -14,9 +14,6 @@
         "ecmaVersion": 12,
         "sourceType": "module"
     },
-    "plugins": [
-        "react"
-    ],
     "rules": {
         "no-underscore-dangle": 0,
         "react/jsx-filename-extension": 0,
