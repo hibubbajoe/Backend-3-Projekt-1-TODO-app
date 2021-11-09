@@ -1,15 +1,12 @@
 const jwt = require('jsonwebtoken');
 
 const checkUser = (token) => {
-    if (token) {
-        const decodedUser = jwt.decode(token)
-        id = decodedUser.user;
-        return id;
-
-    } else {
-        console.error('Unauthorized');
-        return null;
-    }
+  if (token) {
+    const decodedUser = jwt.decode(token);
+    const id = decodedUser.user;
+    return id;
+  }
+  return null;
 };
 
 module.exports = checkUser;

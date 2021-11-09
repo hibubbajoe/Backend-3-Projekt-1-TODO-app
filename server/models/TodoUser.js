@@ -1,25 +1,26 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
-const bcrypt = require("bcrypt");
+const mongoose = require('mongoose');
+
+const { Schema } = mongoose;
+const bcrypt = require('bcrypt');
 
 const TodoUserSchema = new Schema(
   {
     password: {
       type: String,
-      required: true
+      required: true,
     },
     email: {
       type: String,
-      required: true
+      required: true,
     },
   },
   {
-    timestamps: true
-  }
+    timestamps: true,
+  },
 );
 
 TodoUserSchema.pre('save', function (next) {
-  bcrypt.hash(this.password, + process.env.SALT_ROUNDS, (err, hash) => {
+  bcrypt.hash(this.password, +process.env.SALT_ROUNDS, (err, hash) => {
     if (err) {
       const error = new Error('Bcrypt');
       next(error);
@@ -29,4 +30,4 @@ TodoUserSchema.pre('save', function (next) {
   });
 });
 
-module.exports = mongoose.model("TodoUser", TodoUserSchema);
+module.exports = mongoose.model('TodoUser', TodoUserSchema);

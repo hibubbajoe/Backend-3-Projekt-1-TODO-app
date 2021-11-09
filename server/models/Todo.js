@@ -1,5 +1,6 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+
+const { Schema } = mongoose;
 
 const TodoSchema = new Schema(
   {
@@ -8,27 +9,27 @@ const TodoSchema = new Schema(
     },
     body: {
       type: String,
-      required: true
+      required: true,
     },
     published: {
       type: Date,
       default: Date.now(),
-      required: true
+      required: true,
     },
     category: {
       type: Schema.Types.ObjectId,
-      ref: "TodoCategory"
+      ref: 'TodoCategory',
     },
     author: {
       type: Schema.Types.ObjectId,
-      ref: "TodoUser",
-      required: true
-    }
+      ref: 'TodoUser',
+      required: true,
+    },
   },
   {
-    timestamps: true
-  }
+    timestamps: true,
+  },
 
 );
 
-module.exports = mongoose.model("Todo", TodoSchema);
+module.exports = mongoose.model('Todo', TodoSchema);

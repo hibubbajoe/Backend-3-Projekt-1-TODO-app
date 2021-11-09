@@ -1,21 +1,24 @@
-var express = require("express");
-var router = express.Router();
-var { createTodo, getTodoById, getUserTodos, updateTodo, deleteTodo } = require("../controllers/todos");
-var authUser = require("../middlewares/authUser")
+const express = require('express');
+
+const router = express.Router();
+const {
+  createTodo, getTodoById, getUserTodos, updateTodo, deleteTodo,
+} = require('../controllers/todos');
+const authUser = require('../middlewares/authUser');
 
 /* GET ALL ITEMS */
-router.get("/", authUser, getUserTodos);
+router.get('/', authUser, getUserTodos);
 
 /* GET ITEM BY ID */
-router.get("/:id", authUser, getTodoById);
+router.get('/:id', authUser, getTodoById);
 
 /* ADD NEW TODO ITEM */
-router.post("/", authUser, createTodo);
+router.post('/', authUser, createTodo);
 
 /* UPDATE ITEM BY ID */
-router.post("/:id", authUser, updateTodo)
+router.post('/:id', authUser, updateTodo);
 
 /* DELETE  ITEM BY ID */
-router.delete("/:id", authUser, deleteTodo);
+router.delete('/:id', authUser, deleteTodo);
 
 module.exports = router;
