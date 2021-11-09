@@ -14,7 +14,7 @@ exports.addNewUser = async (req, res) => {
     const user = await new TodoUser(data);
     try {
 
-        if (!checkNoEmptyFieldsOnRegistration(res.body.email, req.body.password)) {
+        if (!checkNoEmptyFieldsOnRegistration(req.body.email, req.body.password)) {
             return res.sendStatus(400);
         }
         if (!user) res.sendStatus(400);
