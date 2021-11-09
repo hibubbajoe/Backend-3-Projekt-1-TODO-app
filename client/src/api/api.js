@@ -2,7 +2,7 @@ import axios from 'axios';
 import { getToken } from '../utils/tokenHandlers';
 
 const url = axios.create({
-  baseURL: 'https://stormy-basin-76357.herokuapp.com/',
+  baseURL: 'https://stormy-basin-76357.herokuapp.com/api',
   headers: { token: getToken() },
 });
 
