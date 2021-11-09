@@ -2,7 +2,7 @@ import axios from 'axios';
 import { getToken } from '../utils/tokenHandlers';
 
 const url = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: 'https://evening-brook-20330.herokuapp.com/',
   headers: { token: getToken() },
 });
 
