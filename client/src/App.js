@@ -1,12 +1,12 @@
-import "./App.css";
-import React from "react";
-import LandingPage from "./pages/LandingPage";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import './App.css';
+import React from 'react';
+import { Switch, Route } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { FetchProvider } from "./context/FetchContext";
+import LandingPage from './pages/LandingPage';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import { FetchProvider } from './context/FetchContext';
 
 const darkTheme = createTheme({
   palette: {
@@ -16,7 +16,7 @@ const darkTheme = createTheme({
 
 function App() {
   return (
-    <div >
+    <div>
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
         <Switch>

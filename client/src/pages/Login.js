@@ -1,28 +1,30 @@
 import React, { useState } from 'react';
-import { useHistory } from "react-router-dom"
-import { Container, Button, TextField, Link, Grid, Box, Typography } from '@mui/material';
+import { useHistory } from 'react-router-dom';
+import {
+  Container, Button, TextField, Link, Grid, Box, Typography,
+} from '@mui/material';
 import { loginUser } from '../api/api';
-import { setToken } from "../utils/tokenHandlers"
+import { setToken } from '../utils/tokenHandlers';
 
 export default function Login() {
   const history = useHistory();
 
-  const [loginValue, setLoginValue] = useState({})
+  const [loginValue, setLoginValue] = useState({});
 
   const handleChange = (e) => {
     e.preventDefault();
 
     setLoginValue({
       ...loginValue,
-      [e.target.name]: e.target.value
-    })
-  }
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const user = await loginUser(loginValue);
-    setToken(user.data)
-    history.push(`/`)
+    setToken(user.data);
+    history.push('/');
   };
 
   return (
@@ -72,7 +74,7 @@ export default function Login() {
           <Grid container>
             <Grid item>
               <Link href="/register" variant="body2">
-                {"Don't have an account? Sign Up"}
+                Don&apos;t have an account? Sign Up
               </Link>
             </Grid>
           </Grid>
