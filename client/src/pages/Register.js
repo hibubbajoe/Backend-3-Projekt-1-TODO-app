@@ -1,11 +1,22 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import {
-  Container, Button, TextField, Link, Grid, Box, Typography,
+  Container,
+  Button,
+  TextField,
+  Alert,
+  Link,
+  Grid,
+  Box,
+  Typography,
 } from '@mui/material';
 import { addNewUser } from '../api/api';
+import { setToken } from '../utils/tokenHandlers';
 
 export default function Register() {
   const [loginValue, setLoginValue] = useState({});
+  const [errorMessage, setErrorMessage] = useState();
+  const history = useHistory();
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -18,8 +29,16 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const user = await addNewUser(loginValue);
-    console.log(user);
+    addNewUser(loginValue)
+      .then((res) => {
+        console.log(res);
+        setToken(res.data);
+        history.push('/');
+      })
+      .catch((error) => {
+        console.log(error);
+        setErrorMessage(error.response.data);
+      });
   };
 
   return (
@@ -32,11 +51,16 @@ export default function Register() {
           alignItems: 'center',
         }}
       >
-
         <Typography component="h1" variant="h5">
           Register your new account
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} onChange={handleChange} noValidate sx={{ mt: 1 }}>
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          onChange={handleChange}
+          noValidate
+          sx={{ mt: 1 }}
+        >
           <TextField
             margin="normal"
             required
@@ -66,6 +90,8 @@ export default function Register() {
           >
             I want to sign up
           </Button>
+          {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+
           <Grid container>
             <Grid item>
               <Link href="/login" variant="body2">

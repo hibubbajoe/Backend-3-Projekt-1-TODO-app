@@ -8,10 +8,12 @@ exports.addNewUser = async (req, res) => {
 
   const user = await new TodoUser(data);
   try {
+    const existingUser = await TodoUser.findOne({ email: req.body.email });
+    if (existingUser) {
+      return res.status(400).json("Email already used.");
+    }
     if (!checkNoEmptyFieldsOnRegistration(req.body.email, req.body.password)) {
-      return res
-        .status(400)
-        .json({ errorMessage: "Please fill in all required fields" });
+      return res.status(400).json("Please fill in all required fields");
     }
     if (!user) res.sendStatus(400);
     const newUser = await user.save();
