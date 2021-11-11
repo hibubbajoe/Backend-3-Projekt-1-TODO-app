@@ -1,15 +1,22 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
-  Container, Button, TextField, Link, Grid, Box, Typography,
+  Container,
+  Button,
+  TextField,
+  Link,
+  Grid,
+  Alert,
+  Box,
+  Typography,
 } from '@mui/material';
 import { loginUser } from '../api/api';
 import { setToken } from '../utils/tokenHandlers';
 
 export default function Login() {
   const history = useHistory();
-
   const [loginValue, setLoginValue] = useState({});
+  const [errorMessage, setErrorMessage] = useState();
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -20,11 +27,17 @@ export default function Login() {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const user = await loginUser(loginValue);
-    setToken(user.data);
-    history.push('/');
+    loginUser(loginValue)
+      .then((res) => {
+        console.log(res);
+        setToken(res.data);
+        history.push('/');
+      })
+      .catch((error) => {
+        setErrorMessage(error.response.data);
+      });
   };
 
   return (
@@ -37,11 +50,16 @@ export default function Login() {
           alignItems: 'center',
         }}
       >
-
         <Typography component="h1" variant="h5">
           Log in to your account
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} onChange={handleChange} noValidate sx={{ mt: 1 }}>
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          onChange={handleChange}
+          noValidate
+          sx={{ mt: 1 }}
+        >
           <TextField
             margin="normal"
             required
@@ -71,6 +89,7 @@ export default function Login() {
           >
             Let me in
           </Button>
+          {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
           <Grid container>
             <Grid item>
               <Link href="/register" variant="body2">
