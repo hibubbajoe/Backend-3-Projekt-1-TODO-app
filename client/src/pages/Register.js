@@ -31,12 +31,10 @@ export default function Register() {
     e.preventDefault();
     addNewUser(loginValue)
       .then((res) => {
-        console.log(res);
         setToken(res.data);
         history.push('/');
       })
       .catch((error) => {
-        console.log(error);
         setErrorMessage(error.response.data);
       });
   };

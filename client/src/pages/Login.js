@@ -31,7 +31,6 @@ export default function Login() {
     e.preventDefault();
     loginUser(loginValue)
       .then((res) => {
-        console.log(res);
         setToken(res.data);
         history.push('/');
       })
