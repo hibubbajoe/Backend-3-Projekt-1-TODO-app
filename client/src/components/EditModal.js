@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import {
   Box,
+  Alert,
   Button,
   Modal,
   TextField,
@@ -29,9 +30,15 @@ const style = {
 
 export default function EditModal() {
   const {
-    categoryData, open, handleClose, card, trigger, setTrigger,
+    categoryData,
+    open,
+    handleClose,
+    card,
+    trigger,
+    setTrigger,
   } = useContext(FetchContext);
   const [insertValue, setInsertValue] = useState();
+  const [errorMessage, setErrorMessage] = useState();
   const [categoryOption, setCategoryOption] = useState();
 
   const handleCategories = (e, child) => {
@@ -63,11 +70,16 @@ export default function EditModal() {
 
   const updateSubmit = async (e) => {
     e.preventDefault();
-    await editTodoById(insertValue, insertValue._id);
-    setInsertValue({});
-    setCategoryOption('');
-    handleClose();
-    setTrigger(!trigger);
+    try {
+      await editTodoById(insertValue, insertValue._id);
+      setInsertValue({});
+      setCategoryOption('');
+      handleClose();
+      setTrigger(!trigger);
+    } catch (error) {
+      console.log(error);
+      setErrorMessage(error.response.data);
+    }
   };
 
   const deleteSubmit = async (e) => {
@@ -82,31 +94,76 @@ export default function EditModal() {
   return (
     <>
       {insertValue && (
-      <Modal
-        open={open}
-        onClose={closeModal}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box component="form" sx={style}>
-          <Typography
-            component="h1"
-            variant="h6"
-            align="center"
-            color="text.primary"
-            gutterBottom
-          >
-            What do you want todo
-          </Typography>
-          <TextField sx={{ width: '100%', m: 0.5 }} variant="outlined" name="title" value={insertValue.title || ''} label="Title" onChange={handleOnChange} />
-          <TextField sx={{ width: '100%', m: 0.5 }} multiline variant="outlined" name="body" value={insertValue.body || ''} label="Description" onChange={handleOnChange} required />
-          <Select sx={{ width: '100%', m: 0.5 }} variant="outlined" name="category" value={categoryOption || ''} label="Type of todo" onChange={(e, child) => handleCategories(e, child)}>
-            {categoryData.map((option) => <MenuItem key={option._id} id={option._id} value={option.category}>{option.category}</MenuItem>)}
-          </Select>
-          <Button variant="outlined" sx={{ width: '50%', m: 0.5 }} onClick={updateSubmit}>Update todo</Button>
-          <Button variant="outlined" sx={{ width: '50%', m: 0.5, color: 'red' }} onClick={deleteSubmit}>Delete todo</Button>
-        </Box>
-      </Modal>
+        <Modal
+          open={open}
+          onClose={closeModal}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box component="form" sx={style}>
+            <Typography
+              component="h1"
+              variant="h6"
+              align="center"
+              color="text.primary"
+              gutterBottom
+            >
+              What do you want todo
+            </Typography>
+            <TextField
+              sx={{ width: '100%', m: 0.5 }}
+              variant="outlined"
+              name="title"
+              value={insertValue.title || ''}
+              label="Title"
+              onChange={handleOnChange}
+            />
+            <TextField
+              sx={{ width: '100%', m: 0.5 }}
+              multiline
+              variant="outlined"
+              name="body"
+              value={insertValue.body || ''}
+              label="Description"
+              onChange={handleOnChange}
+              required
+            />
+            <Select
+              sx={{ width: '100%', m: 0.5 }}
+              variant="outlined"
+              name="category"
+              value={categoryOption || ''}
+              label="Type of todo"
+              onChange={(e, child) => handleCategories(e, child)}
+            >
+              {categoryData.map((option) => (
+                <MenuItem
+                  key={option._id}
+                  id={option._id}
+                  value={option.category}
+                >
+                  {option.category}
+                </MenuItem>
+              ))}
+            </Select>
+            {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+
+            <Button
+              variant="outlined"
+              sx={{ width: '50%', m: 0.5 }}
+              onClick={updateSubmit}
+            >
+              Update todo
+            </Button>
+            <Button
+              variant="outlined"
+              sx={{ width: '50%', m: 0.5, color: 'red' }}
+              onClick={deleteSubmit}
+            >
+              Delete todo
+            </Button>
+          </Box>
+        </Modal>
       )}
     </>
   );

@@ -3,6 +3,20 @@ const bcrypt = require("bcrypt");
 const TodoUser = require("../models/TodoUser");
 const { checkNoEmptyFieldsOnRegistration } = require("../utils/userTests");
 
+exports.loggedInUser = (req, res, next) => {
+  try {
+    const { token } = req.headers;
+    if (!token) return res.json(false);
+    if (token) {
+      jwt.verify(token, process.env.JWT_PRIVATE_KEY);
+      return res.json(true);
+    }
+  } catch (err) {
+    console.error(err);
+    return res.json(false);
+  }
+};
+
 exports.addNewUser = async (req, res) => {
   const data = req.body;
 

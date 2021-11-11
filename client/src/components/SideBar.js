@@ -4,18 +4,20 @@ import LabelOutlinedIcon from '@mui/icons-material/Label';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 import {
-  Button,
-  Box,
-  Collapse,
-  InputBase,
+  Alert, Button, Box, Collapse, InputBase,
 } from '@mui/material';
 import { addNewUserCategory, deleteUserCategory } from '../api/api';
 import { FetchContext } from '../context/FetchContext';
 
 export default function SideBar() {
   const [insertValue, setInsertValue] = useState({});
+  const [errorMessage, setErrorMessage] = useState();
   const {
-    categoryData, todoData, setFilteredTodos, setTrigger, trigger,
+    categoryData,
+    todoData,
+    setFilteredTodos,
+    setTrigger,
+    trigger,
   } = useContext(FetchContext);
   const [activeBtn, setActiveBtn] = useState();
   const [collapse, setCollapse] = useState(false);
@@ -29,7 +31,7 @@ export default function SideBar() {
       setCollapse(false);
       setTrigger(!trigger);
     } catch (error) {
-      console.error(error);
+      setErrorMessage(error.response.data);
     }
   };
 
@@ -49,7 +51,9 @@ export default function SideBar() {
     setActiveBtn(e.target.id);
     if (category.length > 0) setFilteredTodos(category);
     else {
-      const filteredTodos = todoData.filter((todo) => todo.category === category._id);
+      const filteredTodos = todoData.filter(
+        (todo) => todo.category === category._id,
+      );
       setFilteredTodos(filteredTodos);
     }
   };
@@ -63,13 +67,20 @@ export default function SideBar() {
       <Box
         xs={2}
         sx={{
-          position: 'absolute', top: '10%', display: 'flex', flexDirection: 'column', width: '15rem',
+          position: 'absolute',
+          top: '10%',
+          display: 'flex',
+          flexDirection: 'column',
+          width: '15rem',
         }}
       >
         <Button
           id="todos"
           sx={{
-            color: 'black', justifyContent: 'flex-start', pl: 3, backgroundColor: activeBtn === 'todos' ? '#FDFD66' : '',
+            color: 'black',
+            justifyContent: 'flex-start',
+            pl: 3,
+            backgroundColor: activeBtn === 'todos' ? '#FDFD66' : '',
           }}
           onClick={(e) => filterCategories(e, todoData)}
         >
@@ -77,7 +88,14 @@ export default function SideBar() {
           Todos
         </Button>
         {categoryData.map((category) => (
-          <Box key={category._id} sx={{ display: 'flex', justifyContent: 'space-between', backgroundColor: activeBtn === category.category ? '#FDFD66' : '' }}>
+          <Box
+            key={category._id}
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              backgroundColor: activeBtn === category.category ? '#FDFD66' : '',
+            }}
+          >
             <Button
               id={category.category}
               sx={{ color: 'black', justifyContent: 'flex-start', pl: 3 }}
@@ -91,14 +109,31 @@ export default function SideBar() {
             </Button>
           </Box>
         ))}
-        <Button sx={{ color: 'black', justifyContent: 'flex-start', pl: 3 }} onClick={() => setCollapse(!collapse)}>
+        <Button
+          sx={{ color: 'black', justifyContent: 'flex-start', pl: 3 }}
+          onClick={() => setCollapse(!collapse)}
+        >
           <AddOutlinedIcon />
           Add category
         </Button>
         <Collapse in={collapse}>
-          <InputBase sx={{ color: 'black', justifyContent: 'flex-start', pl: 3 }} variant="outlined" name="category" placeholder="category" autoComplete="off" onChange={handleCategories} />
-          <Button sx={{ color: 'black', justifyContent: 'flex-start', pl: 3 }} onClick={insertCategory}>Add category</Button>
+          <InputBase
+            sx={{ color: 'black', justifyContent: 'flex-start', pl: 3 }}
+            variant="outlined"
+            name="category"
+            placeholder="category"
+            autoComplete="off"
+            required
+            onChange={handleCategories}
+          />
+          <Button
+            sx={{ color: 'black', justifyContent: 'flex-start', pl: 3 }}
+            onClick={insertCategory}
+          >
+            Add category
+          </Button>
         </Collapse>
+        {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
       </Box>
     </>
   );

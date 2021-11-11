@@ -16,6 +16,7 @@ export const editTodoById = (payload, id) => url.post(`/todos/${id}`, payload);
 // USER endpoints
 export const loginUser = (payload) => url.post('/users/login', payload);
 export const addNewUser = (payload) => url.post('/users', payload);
+export const loggedInUser = () => url.get('/users/loggedInUser');
 
 // CATEGORY endpoints
 export const getUserCategories = () => url.get('/categories');
@@ -33,6 +34,7 @@ const api = {
   getUserCategories,
   addNewUserCategory,
   deleteUserCategory,
+  loggedInUser,
 };
 
 export default api;
