@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   Container,
@@ -12,8 +12,10 @@ import {
 } from '@mui/material';
 import { loginUser } from '../api/api';
 import { setToken } from '../utils/tokenHandlers';
+import { LoggedInContext } from '../context/LoggedInContext';
 
 export default function Login() {
+  const { getIsUserLoggedIn } = useContext(LoggedInContext);
   const history = useHistory();
   const [loginValue, setLoginValue] = useState({});
   const [errorMessage, setErrorMessage] = useState();
@@ -32,7 +34,8 @@ export default function Login() {
     loginUser(loginValue)
       .then((res) => {
         setToken(res.data);
-        history.push('/');
+        getIsUserLoggedIn();
+        history.push('/todos');
       })
       .catch((error) => {
         setErrorMessage(error.response.data);

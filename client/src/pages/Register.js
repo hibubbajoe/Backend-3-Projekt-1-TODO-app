@@ -32,7 +32,7 @@ export default function Register() {
     addNewUser(loginValue)
       .then((res) => {
         setToken(res.data);
-        history.push('/');
+        history.push('/login');
       })
       .catch((error) => {
         setErrorMessage(error.response.data);

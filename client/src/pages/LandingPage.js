@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Box, Grid, Button } from '@mui/material';
 import SideBar from '../components/SideBar';
@@ -7,20 +7,28 @@ import TodoContainer from '../components/TodoContainer';
 import TodoInputField from '../components/TodoInputField';
 import { FetchContext } from '../context/FetchContext';
 import { deleteToken } from '../utils/tokenHandlers';
-import { loggedInUser } from '../api/api';
+// import { loggedInUser } from '../api/api';
+import { LoggedInContext } from '../context/LoggedInContext';
 
 export default function LandingPage() {
   const { filteredTodos } = useContext(FetchContext);
-  const [loggedIn, setLoggedIn] = useState();
+  const { userLoggedIn, getIsUserLoggedIn } = useContext(LoggedInContext);
+
+  // const [loggedIn, setLoggedIn] = useState();
   const history = useHistory();
 
-  const handleLogin = async () => {
-    await loggedInUser().then((res) => setLoggedIn(res.data));
-  };
-
   useEffect(() => {
-    handleLogin();
-  }, []);
+    getIsUserLoggedIn();
+    console.log(userLoggedIn);
+  });
+
+  // const handleLogin = async () => {
+  //   await loggedInUser().then((res) => setLoggedIn(res.data));
+  // };
+
+  // useEffect(() => {
+  //   handleLogin();
+  // }, []);
 
   // useEffect(() => {
   //   console.log(loggedIn);
@@ -33,7 +41,7 @@ export default function LandingPage() {
 
   return (
     <>
-      {loggedIn ? (
+      {userLoggedIn ? (
         <Box sx={{ flexgrow: 1 }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -48,9 +56,9 @@ export default function LandingPage() {
       ) : (
         <h2>
           Please
-          <a href="/login"> Log In </a>
-          to view and handle your todos. Did you already log in? Then refresh
-          the page to get rid of this bug!
+          <a href="/login"> log in </a>
+          to view your todos. If you are already logged in, try refreshing the
+          page.
         </h2>
       )}
     </>
